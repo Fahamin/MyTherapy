@@ -17,7 +17,12 @@
         android:layout_marginEnd="-5dp"
         android:background="@drawable/medication_banner"/>
 
-
+    <FrameLayout
+        android:layout_above="@id/reminder_list"
+        android:id="@+id/ad_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reminder_list"

@@ -1,5 +1,7 @@
 package medication.smartpatient.mytherapy;
 
+import static medication.smartpatient.mytherapy.utils.Fun.showBanner;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -41,6 +44,7 @@ import medication.smartpatient.mytherapy.adapter.MedListAdapter;
 import medication.smartpatient.mytherapy.model.ReminderItem;
 import medication.smartpatient.mytherapy.utils.AlarmReceiver;
 import medication.smartpatient.mytherapy.utils.DateTimeSorter;
+import medication.smartpatient.mytherapy.utils.Fun;
 import medication.smartpatient.mytherapy.utils.Reminder;
 import medication.smartpatient.mytherapy.utils.ReminderDatabase;
 
@@ -61,9 +65,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
         setContentView(R.layout.activity_main);
 
@@ -74,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         // Initialize reminder database
         rb = new ReminderDatabase(getApplicationContext());
 
-
+        new Fun(this);
+        FrameLayout adContainerView = findViewById(R.id.ad_view_container);
+        showBanner(this, adContainerView);
         mAddReminderButton = (FloatingActionButton) findViewById(R.id.add_reminder);
         mList = (RecyclerView) findViewById(R.id.reminder_list);
         mNoReminderView = (TextView) findViewById(R.id.no_reminder_text);

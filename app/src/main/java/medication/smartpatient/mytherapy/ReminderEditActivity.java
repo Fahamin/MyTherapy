@@ -1,5 +1,7 @@
 package medication.smartpatient.mytherapy;
 
+import static medication.smartpatient.mytherapy.utils.Fun.showBanner;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +29,13 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.Calendar;
 
 import medication.smartpatient.mytherapy.utils.AlarmReceiver;
+import medication.smartpatient.mytherapy.utils.Fun;
 import medication.smartpatient.mytherapy.utils.Reminder;
 import medication.smartpatient.mytherapy.utils.ReminderDatabase;
 
 public class ReminderEditActivity extends AppCompatActivity implements
         TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener{
+        DatePickerDialog.OnDateSetListener {
 
     private Toolbar mToolbar;
     private EditText mTitleText;
@@ -76,7 +80,6 @@ public class ReminderEditActivity extends AppCompatActivity implements
     private static final long milMonth = 2592000000L;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +106,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
         // Setup Reminder Title EditText
         mTitleText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -112,7 +116,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Get reminder id from intent
@@ -121,7 +126,9 @@ public class ReminderEditActivity extends AppCompatActivity implements
         // Get reminder using reminder id
         rb = new ReminderDatabase(this);
         mReceivedReminder = rb.getReminder(mReceivedID);
-
+        new Fun(this);
+        FrameLayout adContainerView = findViewById(R.id.ad_view_container);
+        showBanner(this, adContainerView);
         // Get values from reminder
         mTitle = mReceivedReminder.getTitle();
         mDate = mReceivedReminder.getDate();
@@ -203,7 +210,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
     // To save state on device rotation
     @Override
-    protected void onSaveInstanceState (Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putCharSequence(KEY_TITLE, mTitleText.getText());
@@ -216,9 +223,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
 
-
     // On clicking Time picker
-    public void setTime(View v){
+    public void setTime(View v) {
         Calendar now = Calendar.getInstance();
         TimePickerDialog tpd = TimePickerDialog.newInstance(
                 this,
@@ -231,7 +237,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
     // On clicking Date picker
-    public void setDate(View v){
+    public void setDate(View v) {
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
@@ -243,12 +249,10 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
 
-
-
     // Obtain date from date picker
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        monthOfYear ++;
+        monthOfYear++;
         mDay = dayOfMonth;
         mMonth = monthOfYear;
         mYear = year;
@@ -288,7 +292,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
     // On clicking repeat type button
-    public void selectRepeatType(View v){
+    public void selectRepeatType(View v) {
         final String[] items = new String[5];
 
         items[0] = "Minute";
@@ -314,7 +318,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
     // On clicking repeat interval button
-    public void setRepeatNo(View v){
+    public void setRepeatNo(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Enter Number");
 
@@ -330,8 +334,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
                             mRepeatNo = Integer.toString(1);
                             mRepeatNoText.setText(mRepeatNo);
                             mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
-                        }
-                        else {
+                        } else {
                             mRepeatNo = input.getText().toString().trim();
                             mRepeatNoText.setText(mRepeatNo);
                             mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
@@ -347,7 +350,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
     // On clicking the update button
-    public void updateReminder(){
+    public void updateReminder() {
         // Set new values in the reminder
         mReceivedReminder.setTitle(mTitle);
         mReceivedReminder.setDate(mDate);
@@ -392,7 +395,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
                 mAlarmReceiver.setAlarm(getApplicationContext(), mCalendar, mReceivedID);
             }
         }
-
+        Fun.addShow();
         // Create toast to confirm update
         Toast.makeText(getApplicationContext(), "Edited",
                 Toast.LENGTH_SHORT).show();
@@ -445,6 +448,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
                 rb.deleteReminder(temp);
                 mAlarmReceiver.cancelAlarm(getApplicationContext(), mReceivedID);
+                Fun.addShow();
+
                 onBackPressed();
                 return true;
 

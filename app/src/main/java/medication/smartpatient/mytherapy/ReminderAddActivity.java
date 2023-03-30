@@ -1,5 +1,7 @@
 package medication.smartpatient.mytherapy;
 
+import static medication.smartpatient.mytherapy.utils.Fun.showBanner;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +29,7 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import medication.smartpatient.mytherapy.utils.AlarmReceiver;
+import medication.smartpatient.mytherapy.utils.Fun;
 import medication.smartpatient.mytherapy.utils.Reminder;
 import medication.smartpatient.mytherapy.utils.ReminderDatabase;
 
@@ -85,6 +89,12 @@ public class ReminderAddActivity extends AppCompatActivity implements
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_activity_add_reminder);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
+        new Fun(this);
+        FrameLayout adContainerView = findViewById(R.id.ad_view_container);
+        showBanner(this, adContainerView);
+
 
         // Initialize default values
         mActive = "true";
@@ -375,6 +385,7 @@ public class ReminderAddActivity extends AppCompatActivity implements
             case R.id.discard_reminder:
                 Toast.makeText(getApplicationContext(), "Discarded",
                         Toast.LENGTH_SHORT).show();
+                Fun.addShow();
 
                 onBackPressed();
                 return true;
