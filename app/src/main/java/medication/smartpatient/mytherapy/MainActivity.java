@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private ReminderDatabase rb;
     private AlarmReceiver mAlarmReceiver;
 
+    List<ReminderItem> medicineList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +86,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (mTest.isEmpty()) {
             mNoReminderView.setVisibility(View.VISIBLE);
         }
-
+        medicineList = new ArrayList<>();
+        medicineList = generateData();
         // Create recycler view
         mList.setLayoutManager(new LinearLayoutManager(this));
         registerForContextMenu(mList);
-        mAdapter = new MedListAdapter(generateData(), this, this);
+        mAdapter = new MedListAdapter(medicineList, this, this);
         mList.setAdapter(mAdapter);
 
         // On clicking the floating action button
@@ -170,22 +172,33 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         } else {
             mNoReminderView.setVisibility(View.GONE);
         }
-        mAdapter.notifyDataSetChanged();
+
+        medicineList = new ArrayList<>();
+        medicineList = generateData();
+        mList.setLayoutManager(new LinearLayoutManager(this));
+        registerForContextMenu(mList);
+        mAdapter = new MedListAdapter(medicineList, this, this);
+        mList.setAdapter(mAdapter);
     }
 
-    private void selectReminder(int mClickID) {
-        String mStringClickID = Integer.toString(mClickID);
 
-        // Create intent to edit the reminder
-        // Put reminder id as extra
+    private void selectReminder(int pos) {
+
+        String mStringClickID = Integer.toString(pos);
         Intent i = new Intent(this, ReminderEditActivity.class);
         i.putExtra(ReminderEditActivity.EXTRA_REMINDER_ID, mStringClickID);
         startActivity(i);
+
     }
 
 
     @Override
     public void clickListener(int pos) {
-        selectReminder(pos);
+
+        int mReminderClickID = IDmap.get(pos);
+        selectReminder(mReminderClickID);
+      //  selectReminder(pos);
+
     }
+
 }

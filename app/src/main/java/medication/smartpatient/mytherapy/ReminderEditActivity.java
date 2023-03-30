@@ -439,9 +439,12 @@ public class ReminderEditActivity extends AppCompatActivity implements
             // On clicking discard reminder button
             // Discard any changes
             case R.id.discard_reminder:
-                Toast.makeText(getApplicationContext(), "Changes Discarded",
+                Toast.makeText(getApplicationContext(), "Deleted",
                         Toast.LENGTH_SHORT).show();
+                Reminder temp = rb.getReminder(mReceivedID);
 
+                rb.deleteReminder(temp);
+                mAlarmReceiver.cancelAlarm(getApplicationContext(), mReceivedID);
                 onBackPressed();
                 return true;
 
