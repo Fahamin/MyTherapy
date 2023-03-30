@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey_calendar">#434343</color>
     <color name="gray_color">#E6E6E6</color>
+    <color name="line_color">#9BB5C1</color>
 
     <color name="transperent">#00ffffff</color>
 </resources>

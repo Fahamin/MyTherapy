@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
@@ -45,10 +52,13 @@ import medication.smartpatient.mytherapy.model.ReminderItem;
 import medication.smartpatient.mytherapy.utils.AlarmReceiver;
 import medication.smartpatient.mytherapy.utils.DateTimeSorter;
 import medication.smartpatient.mytherapy.utils.Fun;
+import medication.smartpatient.mytherapy.utils.Prefs;
 import medication.smartpatient.mytherapy.utils.Reminder;
 import medication.smartpatient.mytherapy.utils.ReminderDatabase;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener {
+    private BillingClient billingClient;
+    Prefs prefs;
 
     private RecyclerView mList;
     private MedListAdapter mAdapter;
@@ -75,8 +85,14 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         }
         // Initialize reminder database
         rb = new ReminderDatabase(getApplicationContext());
-
         new Fun(this);
+
+        if (Fun.checkInternet()) {
+            checkSubscription();
+
+        } else {
+            Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+        }
         FrameLayout adContainerView = findViewById(R.id.ad_view_container);
         showBanner(this, adContainerView);
         mAddReminderButton = (FloatingActionButton) findViewById(R.id.add_reminder);
@@ -109,6 +125,51 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         // Initialize alarm
         mAlarmReceiver = new AlarmReceiver();
+    }
+
+    void checkSubscription() {
+
+        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener((billingResult, list) -> {
+        }).build();
+        final BillingClient finalBillingClient = billingClient;
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingServiceDisconnected() {
+
+            }
+
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    finalBillingClient.queryPurchasesAsync(
+                            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build(), (billingResult1, list) -> {
+                                if (billingResult1.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                                    Log.d("testOffer", list.size() + " size");
+                                    if (list.size() > 0) {
+                                        prefs.setPremium(1);
+                                        prefs.setIsRemoveAd(true);
+                                        // set 1 to activate premium feature
+// set 1 to activate premium feature
+                                        int i = 0;
+                                        for (Purchase purchase : list) {
+                                            //Here you can manage each product, if you have multiple subscription
+                                            //     Log.d("testOffer", purchase.getOriginalJson()); // Get to see the order information
+                                            //   Log.d("testOffer", " index" + i);
+                                            i++;
+                                        }
+                                    } else {
+                                        prefs.setPremium(0);
+                                        prefs.setIsRemoveAd(false);
+// set 0 to de-activate premium feature
+                                    }
+                                }
+                            });
+
+                }
+
+            }
+        });
     }
 
     public List<ReminderItem> generateData() {
@@ -201,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         int mReminderClickID = IDmap.get(pos);
         selectReminder(mReminderClickID);
-      //  selectReminder(pos);
+        //  selectReminder(pos);
 
     }
 
