@@ -1,15 +1,18 @@
 <resources>
     <string name="app_name">Medicine Reminder</string>
 
-    <!--   <string name="admob_app_id">ca-app-pub-6013605396446078~9006111884</string>
+    <string name="admob_app_id">ca-app-pub-6013605396446078~9006111884</string>
     <string name="banner_ad">ca-app-pub-6013605396446078/2440703534</string>
     <string name="g_native">ca-app-pub-6013605396446078/3216666953</string>
     <string name="interstitial_key">ca-app-pub-6013605396446078/7922198723</string>
--->
 
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="interstitial_key">ca-app-pub-3940256099942544/1033173712</string>
+
+    <!-- <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+     <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>
+     <string name="interstitial_key">ca-app-pub-3940256099942544/1033173712</string>
+ -->
+
+
 
     <!--    pill_reminder-->
     <string name="title_activity_add_reminder">Add Medication</string>

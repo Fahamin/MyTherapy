@@ -65,7 +65,12 @@ public class Fun {
     public Fun(Activity context) {
         this.context = context;
         this.activity = context;
+        checkAds();
+    }
 
+    private static void checkAds() {
+        Prefs prefs = new Prefs(context);
+        removeAds = prefs.isRemoveAd();
     }
 
     public static void showBanner(Activity activity, FrameLayout adContainerView) {
@@ -113,7 +118,6 @@ public class Fun {
         // Step 3 - Get adaptive ad size and return for setting on the ad view.
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth);
     }
-
 
 
     private static BroadcastReceiver attachmentDownloadCompleteReceive;
