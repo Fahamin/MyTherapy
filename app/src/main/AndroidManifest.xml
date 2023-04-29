@@ -18,13 +18,13 @@
             android:name=".BillingPart.RemoveAdsActivity"
             android:exported="false" />
         <activity
-            android:name=".ReminderAddActivity"
+            android:name=".activity.ReminderAddActivity"
             android:exported="false" />
         <activity
-            android:name=".ReminderEditActivity"
+            android:name=".activity.ReminderEditActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,10 +34,10 @@
         </activity>
 
         <receiver
-            android:name="medication.smartpatient.mytherapy.utils.AlarmReceiver"
+            android:name="medichine.mediacationalert.mytherapy.utils.AlarmReceiver"
             android:exported="true" />
         <receiver
-            android:name="medication.smartpatient.mytherapy.utils.BootReceiver"
+            android:name="medichine.mediacationalert.mytherapy.utils.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
